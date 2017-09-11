@@ -71,6 +71,7 @@ public class VintageDiscoverer {
 		return asList( //
 			new ClasspathRootSelectorResolver(classNamePredicate), //
 			new PackageNameSelectorResolver(classNamePredicate), //
+			new ModuleNameSelectorResolver(classNamePredicate), //
 			new ClassSelectorResolver(), //
 			new MethodSelectorResolver(), //
 			new UniqueIdSelectorResolver(logger)//

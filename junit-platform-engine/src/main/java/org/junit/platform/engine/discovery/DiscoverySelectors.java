@@ -241,6 +241,20 @@ public final class DiscoverySelectors {
 	}
 
 	/**
+	 * Create a {@code ModuleSelector} for the supplied module name.
+	 *
+	 * <p>The unnamed module is not supported.
+	 *
+	 * @param moduleName the module name to select; never {@code null} and
+	 * never blank
+	 * @see ModuleSelector
+	 */
+	public static ModuleSelector selectModule(String moduleName) {
+		Preconditions.notBlank(moduleName, "Module name must not be null or blank");
+		return new ModuleSelector(moduleName.trim());
+	}
+
+	/**
 	 * Create a {@code PackageSelector} for the supplied package name.
 	 *
 	 * <p>The default package is represented by an empty string ({@code ""}).
