@@ -1,0 +1,38 @@
+plugins {
+	id 'org.gradle.java.experimental-jigsaw' version '0.1.1'
+}
+
+repositories {
+	jcenter()
+	maven { url 'https://plugins.gradle.org/m2/' }
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+	maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+	implementation 'org.apiguardian:apiguardian-api:1.0.0'
+	implementation 'org.opentest4j:opentest4j:1.0.0'
+
+	implementation 'com.github.junit-team.junit5:junit-platform-commons:module-SNAPSHOT'
+	implementation 'com.github.junit-team.junit5:junit-platform-console:module-SNAPSHOT'
+	implementation 'com.github.junit-team.junit5:junit-platform-engine:module-SNAPSHOT'
+	implementation 'com.github.junit-team.junit5:junit-platform-launcher:module-SNAPSHOT'
+
+	testImplementation 'com.github.junit-team.junit5:junit-jupiter-api:module-SNAPSHOT'
+	// kotlin plugin not resolvable?!
+	// testImplementation 'com.github.junit-team.junit5:junit-jupiter-engine:module-SNAPSHOT'
+}
+
+javaModule.name = project.name
+
+// enable on your own risk: issues with Java 9...
+compileTestJava.enabled = false
+checkstyleMain.enabled = false
+checkstyleTest.enabled = false
+degraph.enabled = false
+javadoc.enabled = false
+
+compileJava {
+	sourceCompatibility = JavaVersion.VERSION_1_9
+	targetCompatibility = JavaVersion.VERSION_1_9
+}
