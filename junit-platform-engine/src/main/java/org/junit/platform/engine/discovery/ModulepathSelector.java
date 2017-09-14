@@ -17,31 +17,21 @@ import org.junit.platform.commons.util.ToStringBuilder;
 import org.junit.platform.engine.DiscoverySelector;
 
 /**
- * A {@link DiscoverySelector} that selects a module name so that
+ * A {@link DiscoverySelector} that selects all modules on the module-path so that
  * {@link org.junit.platform.engine.TestEngine TestEngines} can discover
- * tests or containers based on modules.
+ * tests or containers based on all resolved modules.
  *
  * @since 1.1
  */
 @API(status = STABLE, since = "1.1")
-public class ModuleSelector implements DiscoverySelector {
+public class ModulepathSelector implements DiscoverySelector {
 
-	private final String moduleName;
-
-	ModuleSelector(String moduleName) {
-		this.moduleName = moduleName;
-	}
-
-	/**
-	 * Get the selected module name.
-	 */
-	public String getModuleName() {
-		return this.moduleName;
+	ModulepathSelector() {
 	}
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this).append("moduleName", this.moduleName).toString();
+		return new ToStringBuilder(this).toString();
 	}
 
 }

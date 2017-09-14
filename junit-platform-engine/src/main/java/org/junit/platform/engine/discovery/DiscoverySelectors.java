@@ -241,6 +241,15 @@ public final class DiscoverySelectors {
 	}
 
 	/**
+	 * Create a {@code ModulepathSelector} for scanning all modules on the module-path.
+	 *
+	 * @see ModulepathSelector
+	 */
+	public static ModulepathSelector selectModulepath() {
+		return new ModulepathSelector();
+	}
+
+	/**
 	 * Create a {@code ModuleSelector} for the supplied module name.
 	 *
 	 * <p>The unnamed module is not supported.

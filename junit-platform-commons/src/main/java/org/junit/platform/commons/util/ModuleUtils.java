@@ -45,6 +45,14 @@ public final class ModuleUtils {
 	///CLOVER:ON
 
 	/**
+	 * Convenient short-cut for finding all classes in all modules that are the module-path.
+	 */
+	public static List<Class<?>> findAllClassesInModulePath(Predicate<Class<?>> classTester,
+			Predicate<String> classNameFilter) {
+		return findAllClassesInModule(ModuleClassFinder.ALL_MODULE_PATH, classTester, classNameFilter);
+	}
+
+	/**
 	 * TODO Add Javadoc to ModuleUtils.findAllClassesInModule
 	 */
 	public static List<Class<?>> findAllClassesInModule(String moduleName, Predicate<Class<?>> classTester,

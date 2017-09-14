@@ -45,6 +45,8 @@ public class CommandLineOptions {
 	private boolean scanClasspath;
 	private List<Path> selectedClasspathEntries = emptyList();
 
+	private boolean scanModulepath;
+
 	private List<URI> selectedUris = emptyList();
 	private List<String> selectedFiles = emptyList();
 	private List<String> selectedDirectories = emptyList();
@@ -91,6 +93,14 @@ public class CommandLineOptions {
 
 	public void setScanClasspath(boolean scanClasspath) {
 		this.scanClasspath = scanClasspath;
+	}
+
+	public boolean isScanModulepath() {
+		return scanModulepath;
+	}
+
+	public void setScanModulepath(boolean scanModulepath) {
+		this.scanModulepath = scanModulepath;
 	}
 
 	public Details getDetails() {
