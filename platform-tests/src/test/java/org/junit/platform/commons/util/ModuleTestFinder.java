@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
-public class ModuleTestFinder implements ModuleUtils.ClassFinder {
+public class ModuleTestFinder implements ModuleClassFinder {
 
 	@Test
 	void test() {

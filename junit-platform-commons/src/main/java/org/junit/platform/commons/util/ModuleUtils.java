@@ -36,23 +36,6 @@ import org.junit.platform.commons.logging.LoggerFactory;
 @API(status = INTERNAL, since = "1.1")
 public final class ModuleUtils {
 
-	/**
-	 * Class finder service providing interface.
-	 */
-	public interface ClassFinder {
-
-		/**
-		 * Return list of classes of the passed-in module that contains potential testable methods.
-		 *
-		 * @param moduleName name of the module to inspect
-		 * @param classNameFilter filter to apply to the fully qualified class name
-		 * @param classTester filter to apply to each class instance
-		 * @return list of classes
-		 */
-		List<Class<?>> findAllClassesInModule(String moduleName, Predicate<Class<?>> classTester,
-				Predicate<String> classNameFilter);
-	}
-
 	private static final Logger logger = LoggerFactory.getLogger(ModuleUtils.class);
 
 	///CLOVER:OFF
@@ -74,12 +57,12 @@ public final class ModuleUtils {
 		List<Class<?>> classes = new ArrayList<>();
 
 		logger.config(() -> "Loading auto-detected class finders...");
-		int count = 0;
-		for (ClassFinder classFinder : ServiceLoader.load(ClassFinder.class, classLoader)) {
+		int serviceCounter = 0;
+		for (ModuleClassFinder classFinder : ServiceLoader.load(ModuleClassFinder.class, classLoader)) {
 			classes.addAll(classFinder.findAllClassesInModule(moduleName, classTester, classNameFilter));
-			count++;
+			serviceCounter++;
 		}
-		if (count == 0) {
+		if (serviceCounter == 0) {
 			logger.warn(() -> "No module class finder service registered! No test classes found.");
 		}
 		return Collections.unmodifiableList(classes);
