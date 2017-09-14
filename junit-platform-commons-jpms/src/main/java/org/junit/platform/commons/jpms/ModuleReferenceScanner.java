@@ -13,63 +13,42 @@ package org.junit.platform.commons.jpms;
 import java.io.IOException;
 import java.lang.module.ModuleReader;
 import java.lang.module.ModuleReference;
-import java.lang.module.ResolvedModule;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apiguardian.api.API;
 import org.junit.platform.commons.JUnitException;
-import org.junit.platform.commons.util.ModuleUtils;
-import org.junit.platform.commons.util.Preconditions;
 
 /**
- * Default module class finder implementation.
+ * JPMS module reference scanner.
  *
- * @see ModuleUtils.ClassFinder
+ * @since 1.1
  */
-@API(status = API.Status.INTERNAL)
-public class ModuleClassFinder implements ModuleUtils.ClassFinder {
+class ModuleReferenceScanner {
 
-	@Override
-	public List<Class<?>> findAllClassesInModule(String moduleName, Predicate<Class<?>> classTester,
-			Predicate<String> classNameFilter) {
-		// @formatter:off
-		List<ModuleReference> references = ModuleLayer.boot()
-				.configuration()
-				.modules()
-				.stream()
-				.filter(module -> module.name().equals(moduleName))
-				.map(ResolvedModule::reference)
-				.collect(Collectors.toList());
-		// @formatter:on
+	private final Predicate<Class<?>> classTester;
+	private final Predicate<String> classNameFilter;
 
-		List<Class<?>> classes = new ArrayList<>();
-		for (ModuleReference reference : references) {
-			scan(classes, reference, classTester, classNameFilter);
-		}
-		return Collections.unmodifiableList(classes);
+	ModuleReferenceScanner(Predicate<Class<?>> classTester, Predicate<String> classNameFilter) {
+		this.classTester = classTester;
+		this.classNameFilter = classNameFilter;
 	}
 
 	/**
 	 * Scan module reference for classes that potentially contain testable methods.
 	 */
-	private void scan(List<Class<?>> classes, ModuleReference reference, Predicate<Class<?>> classTester,
-			Predicate<String> classNameFilter) {
-
+	List<Class<?>> scan(ModuleReference reference) {
 		try (ModuleReader reader = reference.open()) {
 			try (Stream<String> names = reader.list()) {
 				// @formatter:off
-				names.filter(name -> name.endsWith(".class"))
-						.map(this::className)
-						.filter(classNameFilter)
-						.map(this::loadClass)
-						.filter(classTester)
-						.forEach(classes::add);
-				// @formatter:on
+                return names.filter(name -> name.endsWith(".class"))
+                        .map(this::className)
+                        .filter(classNameFilter)
+                        .map(this::loadClass)
+                        .filter(classTester)
+                        .collect(Collectors.toList());
+                // @formatter:on
 			}
 		}
 		catch (IOException e) {
@@ -79,9 +58,7 @@ public class ModuleClassFinder implements ModuleUtils.ClassFinder {
 
 	/** Convert resource name to binary class name. */
 	private String className(String resourceName) {
-		Preconditions.notBlank(resourceName, "resource name must not be null or blank");
-		Preconditions.condition(resourceName.endsWith(".class"), "resource doesn't end with '.class'");
-
+		assert resourceName.endsWith(".class") : "resource name doesn't end with '.class': " + resourceName;
 		resourceName = resourceName.substring(0, resourceName.length() - 6); // 6 = ".class".length()
 		resourceName = resourceName.replace('/', '.');
 		return resourceName;
@@ -102,4 +79,5 @@ public class ModuleClassFinder implements ModuleUtils.ClassFinder {
 			throw new JUnitException("loading class with name '" + binaryName + "' failed", e);
 		}
 	}
+
 }

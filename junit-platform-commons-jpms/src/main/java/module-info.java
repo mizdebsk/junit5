@@ -11,6 +11,6 @@ module org.junit.platform.commons.jpms {
   requires org.apiguardian.api;
   requires org.junit.platform.commons;
 
-  provides org.junit.platform.commons.util.ModuleUtils.ClassFinder with
-      org.junit.platform.commons.jpms.ModuleClassFinder;
+  provides org.junit.platform.commons.util.ModuleClassFinder with
+          org.junit.platform.commons.jpms.DefaultModuleClassFinder;
 }

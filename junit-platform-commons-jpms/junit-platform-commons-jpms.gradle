@@ -25,7 +25,7 @@ dependencies {
 
 javaModule.name = project.name
 
-// enable on your own risk: issues with Java 9...
+// enable on your own risk: issues with Java 9, Gradle and others...
 compileTestJava.enabled = false
 checkstyleMain.enabled = false
 checkstyleTest.enabled = false
@@ -33,6 +33,11 @@ degraph.enabled = false
 javadoc.enabled = false
 
 compileJava {
+	sourceCompatibility = JavaVersion.VERSION_1_9
+	targetCompatibility = JavaVersion.VERSION_1_9
+}
+
+compileTestJava {
 	sourceCompatibility = JavaVersion.VERSION_1_9
 	targetCompatibility = JavaVersion.VERSION_1_9
 }
